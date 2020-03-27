@@ -27,7 +27,7 @@ for _ in range(edg):
     graph[u] = graph.get(u, []) + [(cost, v)]
     vertex.add(u); vertex.add(v)
 
-heuristic = {}
+heuristic = dict()
 for _ in range(vert):
     """ чтение эвристик """
     u, h = input().strip().split()
@@ -75,12 +75,14 @@ while not pQueue.empty():
         heuristic_score = tentative_score + heuristic.get(next_, inf)# оценка с использованием эвристики #heuristic(next_, to_)
         if tentative_score < distance.get(next_, inf):
             path[next_] = currentNode
-            distance[next_] = tentative_score
             pQueue.put((heuristic_score, next_))
             if DEBUG:
                 print(f"Updating path to {next_} through {currentNode}")
+                print(f"Current distance to {next_} is {distance[next_]}")
+                print(f"New distance to {next_} is {distance[currentNode]} + {cost}")
                 print(f"Now path to {next_} is: ", end="")
                 print(reconstructPath(path, next_))
+            distance[next_] = tentative_score
 
 """ восстанавливаем путь """
 print("Answer is: ", end="")
