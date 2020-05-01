@@ -6,73 +6,73 @@
 
 using namespace std;
 
-//структура для хранения ребёр
+//СЃС‚СЂСѓРєС‚СѓСЂР° РґР»СЏ С…СЂР°РЅРµРЅРёСЏ СЂРµР±С‘СЂ
 struct Edge {
-	int vertex; //индекс конца ребра в графе
-	double weight; //длина ребра
-	int heuristics; //значение эвристической функции для вершины на конце ребра
+	int vertex; //РёРЅРґРµРєСЃ РєРѕРЅС†Р° СЂРµР±СЂР° РІ РіСЂР°С„Рµ
+	double weight; //РґР»РёРЅР° СЂРµР±СЂР°
+	int heuristics; //Р·РЅР°С‡РµРЅРёРµ СЌРІСЂРёСЃС‚РёС‡РµСЃРєРѕР№ С„СѓРЅРєС†РёРё РґР»СЏ РІРµСЂС€РёРЅС‹ РЅР° РєРѕРЅС†Рµ СЂРµР±СЂР°
 };
 
-//компаратор для быстрой сортировки вершин по приоритету
-int compare(const void * a, const void * b) {
+//РєРѕРјРїР°СЂР°С‚РѕСЂ РґР»СЏ Р±С‹СЃС‚СЂРѕР№ СЃРѕСЂС‚РёСЂРѕРІРєРё РІРµСЂС€РёРЅ РїРѕ РїСЂРёРѕСЂРёС‚РµС‚Сѓ
+int compare(const void * a, const void * b){
 	return (((Edge*)a)->heuristics - ((Edge*)b)->heuristics);
 }
 
-//структура для хранения вершин графа
+//СЃС‚СЂСѓРєС‚СѓСЂР° РґР»СЏ С…СЂР°РЅРµРЅРёСЏ РІРµСЂС€РёРЅ РіСЂР°С„Р°
 struct Node {
-	char name; //обозначение вершины
-	int num; //число смежных вершин
-	Edge * edges; //массив исходящих ребер
-	string path; //кратчайший путь до вершины
-	double pathLength; //длина кратчайшего пути до вершины
-	bool processed; //была ли вершина обработана алгоритмом
-	Node(char name = 0); //инициализация вершины
+	char name; //РѕР±РѕР·РЅР°С‡РµРЅРёРµ РІРµСЂС€РёРЅС‹
+	int num; //С‡РёСЃР»Рѕ СЃРјРµР¶РЅС‹С… РІРµСЂС€РёРЅ
+	Edge * edges; //РјР°СЃСЃРёРІ РёСЃС…РѕРґСЏС‰РёС… СЂРµР±РµСЂ
+	string path; //РєСЂР°С‚С‡Р°Р№С€РёР№ РїСѓС‚СЊ РґРѕ РІРµСЂС€РёРЅС‹
+	double pathLength; //РґР»РёРЅР° РєСЂР°С‚С‡Р°Р№С€РµРіРѕ РїСѓС‚Рё РґРѕ РІРµСЂС€РёРЅС‹
+	bool processed; //Р±С‹Р»Р° Р»Рё РІРµСЂС€РёРЅР° РѕР±СЂР°Р±РѕС‚Р°РЅР° Р°Р»РіРѕСЂРёС‚РјРѕРј
+	Node(char name = 0); //РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РІРµСЂС€РёРЅС‹
 	~Node() { delete[] edges; }
-	void addNeighboor(int ind, double weight, int h); //добавление исходящего ребра
+	void addNeighboor(int ind, double weight, int h); //РґРѕР±Р°РІР»РµРЅРёРµ РёСЃС…РѕРґСЏС‰РµРіРѕ СЂРµР±СЂР°
 };
 
-//структура для хранения графа
+//СЃС‚СЂСѓРєС‚СѓСЂР° РґР»СЏ С…СЂР°РЅРµРЅРёСЏ РіСЂР°С„Р°
 struct Graph {
-	int num; //число вершин
-	Node vertices[MAX_VERTICES]; //массив вершин
-	char start; //начало искомого пути
-	char finish; //конец искомого пути
-	Graph(char st, char fin); //инициализация графа
-	int find(char name); //возвращает индекс искомой вершины в графе; если  вершины нет - возвращает -1
-	void addVertex(char name); //добавление вершины в граф
-	void addEdge(char from, char to, double weight); //добавление ребра в  граф
-	void preprocessing(); //предобработка
-	void search(); //поиск пути
-	void alphSort();//сортировка вершин по алфавиту
-	string path; //путь, находимый жадным алгоритмом
-	void greedyAlgorithm(); //жадный алгоритм
-	int h(char a) { return abs(a - finish); } //эвристическая оценка расстояния
-	double f(int ind); //значение эвристической функции "расстояние + стоимость" для вершины с данным индексом
-	void resetVertices(); //помечает все вершины как необработанные
-	void print(); //вывод списка вершин на экран
+	int num; //С‡РёСЃР»Рѕ РІРµСЂС€РёРЅ
+	Node vertices[MAX_VERTICES]; //РјР°СЃСЃРёРІ РІРµСЂС€РёРЅ
+	char start; //РЅР°С‡Р°Р»Рѕ РёСЃРєРѕРјРѕРіРѕ РїСѓС‚Рё
+	char finish; //РєРѕРЅРµС† РёСЃРєРѕРјРѕРіРѕ РїСѓС‚Рё
+	Graph(char st, char fin); //РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РіСЂР°С„Р°
+	int find(char name); //РІРѕР·РІСЂР°С‰Р°РµС‚ РёРЅРґРµРєСЃ РёСЃРєРѕРјРѕР№ РІРµСЂС€РёРЅС‹ РІ РіСЂР°С„Рµ; РµСЃР»Рё  РІРµСЂС€РёРЅС‹ РЅРµС‚ - РІРѕР·РІСЂР°С‰Р°РµС‚ -1
+	void addVertex(char name); //РґРѕР±Р°РІР»РµРЅРёРµ РІРµСЂС€РёРЅС‹ РІ РіСЂР°С„
+	void addEdge(char from, char to, double weight); //РґРѕР±Р°РІР»РµРЅРёРµ СЂРµР±СЂР° РІ  РіСЂР°С„
+	void preprocessing(); //РїСЂРµРґРѕР±СЂР°Р±РѕС‚РєР°
+	void search(); //РїРѕРёСЃРє РїСѓС‚Рё
+	void alphSort();//СЃРѕСЂС‚РёСЂРѕРІРєР° РІРµСЂС€РёРЅ РїРѕ Р°Р»С„Р°РІРёС‚Сѓ
+	string path; //РїСѓС‚СЊ, РЅР°С…РѕРґРёРјС‹Р№ Р¶Р°РґРЅС‹Рј Р°Р»РіРѕСЂРёС‚РјРѕРј
+	void greedyAlgorithm(); //Р¶Р°РґРЅС‹Р№ Р°Р»РіРѕСЂРёС‚Рј
+	int h(char a) { return abs(a - finish); } //СЌРІСЂРёСЃС‚РёС‡РµСЃРєР°СЏ РѕС†РµРЅРєР° СЂР°СЃСЃС‚РѕСЏРЅРёСЏ
+	double f(int ind); //Р·РЅР°С‡РµРЅРёРµ СЌРІСЂРёСЃС‚РёС‡РµСЃРєРѕР№ С„СѓРЅРєС†РёРё "СЂР°СЃСЃС‚РѕСЏРЅРёРµ + СЃС‚РѕРёРјРѕСЃС‚СЊ" РґР»СЏ РІРµСЂС€РёРЅС‹ СЃ РґР°РЅРЅС‹Рј РёРЅРґРµРєСЃРѕРј
+	void resetVertices(); //РїРѕРјРµС‡Р°РµС‚ РІСЃРµ РІРµСЂС€РёРЅС‹ РєР°Рє РЅРµРѕР±СЂР°Р±РѕС‚Р°РЅРЅС‹Рµ
+	void print(); //РІС‹РІРѕРґ СЃРїРёСЃРєР° РІРµСЂС€РёРЅ РЅР° СЌРєСЂР°РЅ
 };
 
-//инициализация графа
+//РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РіСЂР°С„Р°
 Graph::Graph(char st, char fin) {
-	start = st;
-	finish = fin;
+	start = st; 
+	finish = fin; 
 	path = "";
 	num = 0;
 	addVertex(start);
 	addVertex(finish);
 }
 
-//добавление ребра в граф
+//РґРѕР±Р°РІР»РµРЅРёРµ СЂРµР±СЂР° РІ РіСЂР°С„
 void Graph::addEdge(char from, char to, double weight) {
-	//находим концы ребра в массиве вершин
+	//РЅР°С…РѕРґРёРј РєРѕРЅС†С‹ СЂРµР±СЂР° РІ РјР°СЃСЃРёРІРµ РІРµСЂС€РёРЅ
 	int indFrom = find(from);
 	int indTo = find(to);
-	//добавляем начало ребра, если его нет в массиве
+	//РґРѕР±Р°РІР»СЏРµРј РЅР°С‡Р°Р»Рѕ СЂРµР±СЂР°, РµСЃР»Рё РµРіРѕ РЅРµС‚ РІ РјР°СЃСЃРёРІРµ
 	if (indFrom == -1) {
 		addVertex(from);
 		indFrom = num - 1;
 	}
-	//добавляем конец ребра, если его нет в массиве
+	//РґРѕР±Р°РІР»СЏРµРј РєРѕРЅРµС† СЂРµР±СЂР°, РµСЃР»Рё РµРіРѕ РЅРµС‚ РІ РјР°СЃСЃРёРІРµ
 	if (indTo == -1) {
 		addVertex(to);
 		indTo = num - 1;
@@ -80,14 +80,14 @@ void Graph::addEdge(char from, char to, double weight) {
 	vertices[indFrom].addNeighboor(indTo, weight, h(to));
 }
 
-//добавление вершины в граф
+//РґРѕР±Р°РІР»РµРЅРёРµ РІРµСЂС€РёРЅС‹ РІ РіСЂР°С„
 void Graph::addVertex(char name) {
 	if (find(name) >= 0) return;
 	vertices[num] = Node(name);
 	num++;
 }
 
-//возвращает индекс искомой вершины в графе; если  вершины нет - возвращает -1
+//РІРѕР·РІСЂР°С‰Р°РµС‚ РёРЅРґРµРєСЃ РёСЃРєРѕРјРѕР№ РІРµСЂС€РёРЅС‹ РІ РіСЂР°С„Рµ; РµСЃР»Рё  РІРµСЂС€РёРЅС‹ РЅРµС‚ - РІРѕР·РІСЂР°С‰Р°РµС‚ -1
 int Graph::find(char name) {
 	for (int i = 0; i < num; i++) {
 		if (vertices[i].name == name) return i;
@@ -95,7 +95,7 @@ int Graph::find(char name) {
 	return -1;
 }
 
-//вывод списка вершин на экран
+//РІС‹РІРѕРґ СЃРїРёСЃРєР° РІРµСЂС€РёРЅ РЅР° СЌРєСЂР°РЅ
 void Graph::print() {
 	cout << "List and number of vertices: ";
 	for (int i = 0; i < num; i++) {
@@ -104,26 +104,26 @@ void Graph::print() {
 	cout << endl;
 }
 
-//предобработка графа (сортировка смежных вершин по приоритету)
+//РїСЂРµРґРѕР±СЂР°Р±РѕС‚РєР° РіСЂР°С„Р° (СЃРѕСЂС‚РёСЂРѕРІРєР° СЃРјРµР¶РЅС‹С… РІРµСЂС€РёРЅ РїРѕ РїСЂРёРѕСЂРёС‚РµС‚Сѓ)
 void Graph::preprocessing() {
 	for (int i = 0; i < num; i++) {
 		qsort(vertices[i].edges, vertices[i].num, sizeof(Edge), compare);
 	}
 }
 
-//отметка всех вершин как необработанных
-void Graph::resetVertices() {
-	for (int i = 0; i < num; i++) {
-		vertices[i].processed = false;
-	}
+//РѕС‚РјРµС‚РєР° РІСЃРµС… РІРµСЂС€РёРЅ РєР°Рє РЅРµРѕР±СЂР°Р±РѕС‚Р°РЅРЅС‹С…
+void Graph::resetVertices(){
+    for (int i = 0; i < num; i++){
+        vertices[i].processed = false;
+    }
 }
 
-//эвристическая функция
+//СЌРІСЂРёСЃС‚РёС‡РµСЃРєР°СЏ С„СѓРЅРєС†РёСЏ
 double Graph::f(int ind) {
 	return vertices[ind].pathLength + h(vertices[ind].name);
 }
 
-//жадный алгоритм поиска пути
+//Р¶Р°РґРЅС‹Р№ Р°Р»РіРѕСЂРёС‚Рј РїРѕРёСЃРєР° РїСѓС‚Рё
 void Graph::greedyAlgorithm() {
 	int startInd = find(start);
 	vertices[startInd].processed = true;
@@ -135,9 +135,9 @@ void Graph::greedyAlgorithm() {
 		int minWeightInd = -1;
 		for (int i = 0; i < vertices[lastVisited].num; i++) {
 			if (!vertices[vertices[lastVisited].edges[i].vertex].processed &&
-				(minWeight > vertices[lastVisited].edges[i].weight ||
-				(minWeight == vertices[lastVisited].edges[i].weight &&
-					vertices[vertices[lastVisited].edges[i].vertex].name < vertices[minWeightInd].name))) {
+			(minWeight > vertices[lastVisited].edges[i].weight || 
+			(minWeight == vertices[lastVisited].edges[i].weight && 
+			vertices[vertices[lastVisited].edges[i].vertex].name < vertices[minWeightInd].name))) {
 				minWeight = vertices[lastVisited].edges[i].weight;
 				minWeightInd = vertices[lastVisited].edges[i].vertex;
 			}
@@ -160,18 +160,18 @@ void Graph::greedyAlgorithm() {
 	return;
 }
 
-//алгоритм поиска кратчайшего пути
+//Р°Р»РіРѕСЂРёС‚Рј РїРѕРёСЃРєР° РєСЂР°С‚С‡Р°Р№С€РµРіРѕ РїСѓС‚Рё
 void Graph::search() {
 	int startInd = find(start);
-	vector<int> toVisit; //индексы вершин, которые нужно посетить
+	vector<int> toVisit; //РёРЅРґРµРєСЃС‹ РІРµСЂС€РёРЅ, РєРѕС‚РѕСЂС‹Рµ РЅСѓР¶РЅРѕ РїРѕСЃРµС‚РёС‚СЊ
 	toVisit.push_back(startInd);
 	vertices[startInd].pathLength = 0;
 	vertices[startInd].path = string(1, start);
 	while (!toVisit.empty()) {
 		double minF = 10000;
 		int curr = 0, currInd = 0;
-		//находим среди вершин, которые нужно обработать, вершину с наименьшим значением
-		//эвристической функции
+		//РЅР°С…РѕРґРёРј СЃСЂРµРґРё РІРµСЂС€РёРЅ, РєРѕС‚РѕСЂС‹Рµ РЅСѓР¶РЅРѕ РѕР±СЂР°Р±РѕС‚Р°С‚СЊ, РІРµСЂС€РёРЅСѓ СЃ РЅР°РёРјРµРЅСЊС€РёРј Р·РЅР°С‡РµРЅРёРµРј
+		//СЌРІСЂРёСЃС‚РёС‡РµСЃРєРѕР№ С„СѓРЅРєС†РёРё
 		for (int i = 0; i < toVisit.size(); i++) {
 			double fI = f(toVisit[i]);
 			if (fI < minF) {
@@ -180,31 +180,31 @@ void Graph::search() {
 				currInd = i;
 			}
 		}
-		//если нашли конечную вершину - выводим путь до неё и завершаем алгоритм
+		//РµСЃР»Рё РЅР°С€Р»Рё РєРѕРЅРµС‡РЅСѓСЋ РІРµСЂС€РёРЅСѓ - РІС‹РІРѕРґРёРј РїСѓС‚СЊ РґРѕ РЅРµС‘ Рё Р·Р°РІРµСЂС€Р°РµРј Р°Р»РіРѕСЂРёС‚Рј
 		if (vertices[curr].name == finish) {
 			cout << vertices[curr].path << endl;
 			return;
 		}
-		//удаляем текущую вершину из множества вершин, которые нужно рассмотреть
+		//СѓРґР°Р»СЏРµРј С‚РµРєСѓС‰СѓСЋ РІРµСЂС€РёРЅСѓ РёР· РјРЅРѕР¶РµСЃС‚РІР° РІРµСЂС€РёРЅ, РєРѕС‚РѕСЂС‹Рµ РЅСѓР¶РЅРѕ СЂР°СЃСЃРјРѕС‚СЂРµС‚СЊ
 		toVisit.erase(toVisit.begin() + currInd);
-		//отмечаем её как просмотренную
+		//РѕС‚РјРµС‡Р°РµРј РµС‘ РєР°Рє РїСЂРѕСЃРјРѕС‚СЂРµРЅРЅСѓСЋ
 		vertices[curr].processed = true;
-		//рассматриваем вершины, смежные с текущей
+		//СЂР°СЃСЃРјР°С‚СЂРёРІР°РµРј РІРµСЂС€РёРЅС‹, СЃРјРµР¶РЅС‹Рµ СЃ С‚РµРєСѓС‰РµР№
 		for (int v = 0; v < vertices[curr].num; v++) {
-			//вычисляем длину пути до рассматриваемой смежной вершины:
-			//"путь до текущей" + "вес ребра между текущей и смежной"
+			//РІС‹С‡РёСЃР»СЏРµРј РґР»РёРЅСѓ РїСѓС‚Рё РґРѕ СЂР°СЃСЃРјР°С‚СЂРёРІР°РµРјРѕР№ СЃРјРµР¶РЅРѕР№ РІРµСЂС€РёРЅС‹:
+			//"РїСѓС‚СЊ РґРѕ С‚РµРєСѓС‰РµР№" + "РІРµСЃ СЂРµР±СЂР° РјРµР¶РґСѓ С‚РµРєСѓС‰РµР№ Рё СЃРјРµР¶РЅРѕР№"
 			double tentScore = vertices[curr].pathLength + vertices[curr].edges[v].weight;
-			//если вершина ещё не обработана или удалось улучшить длину пути до неё, сохраняем новую длину пути
+			//РµСЃР»Рё РІРµСЂС€РёРЅР° РµС‰С‘ РЅРµ РѕР±СЂР°Р±РѕС‚Р°РЅР° РёР»Рё СѓРґР°Р»РѕСЃСЊ СѓР»СѓС‡С€РёС‚СЊ РґР»РёРЅСѓ РїСѓС‚Рё РґРѕ РЅРµС‘, СЃРѕС…СЂР°РЅСЏРµРј РЅРѕРІСѓСЋ РґР»РёРЅСѓ РїСѓС‚Рё
 			if (!vertices[vertices[curr].edges[v].vertex].processed || vertices[vertices[curr].edges[v].vertex].pathLength == -1
 				|| tentScore < vertices[vertices[curr].edges[v].vertex].pathLength) {
 				vertices[vertices[curr].edges[v].vertex].path = vertices[curr].path + vertices[vertices[curr].edges[v].vertex].name;
 				vertices[vertices[curr].edges[v].vertex].pathLength = tentScore;
-				//вывод пути до рассматриваемой вершины на экран
+				//РІС‹РІРѕРґ РїСѓС‚Рё РґРѕ СЂР°СЃСЃРјР°С‚СЂРёРІР°РµРјРѕР№ РІРµСЂС€РёРЅС‹ РЅР° СЌРєСЂР°РЅ
 				cout << "Intermediate path: ";
 				cout << vertices[vertices[curr].edges[v].vertex].path << endl;
-				//добавляем смежные вершины в множество вершин, которые нужно рассмотреть
+				//РґРѕР±Р°РІР»СЏРµРј СЃРјРµР¶РЅС‹Рµ РІРµСЂС€РёРЅС‹ РІ РјРЅРѕР¶РµСЃС‚РІРѕ РІРµСЂС€РёРЅ, РєРѕС‚РѕСЂС‹Рµ РЅСѓР¶РЅРѕ СЂР°СЃСЃРјРѕС‚СЂРµС‚СЊ
 				toVisit.push_back(vertices[curr].edges[v].vertex);
-				//удаляем последнее добавление, если вершина там уже была
+				//СѓРґР°Р»СЏРµРј РїРѕСЃР»РµРґРЅРµРµ РґРѕР±Р°РІР»РµРЅРёРµ, РµСЃР»Рё РІРµСЂС€РёРЅР° С‚Р°Рј СѓР¶Рµ Р±С‹Р»Р°
 				for (int i = 0; i < toVisit.size() - 1; i++) {
 					if (toVisit[i] == vertices[curr].edges[v].vertex) {
 						toVisit.pop_back();
@@ -214,13 +214,13 @@ void Graph::search() {
 			}
 		}
 	}
-	//если алгоритм не завершился до этого момента, пути между вершинами нет
+	//РµСЃР»Рё Р°Р»РіРѕСЂРёС‚Рј РЅРµ Р·Р°РІРµСЂС€РёР»СЃСЏ РґРѕ СЌС‚РѕРіРѕ РјРѕРјРµРЅС‚Р°, РїСѓС‚Рё РјРµР¶РґСѓ РІРµСЂС€РёРЅР°РјРё РЅРµС‚
 	cout << "There must be no path." << endl;
 	return;
 }
 
-//инициализация вершины
-Node::Node(char name) {
+//РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РІРµСЂС€РёРЅС‹
+Node::Node(char name){
 	this->name = name;
 	num = 0;
 	edges = nullptr;
@@ -229,10 +229,10 @@ Node::Node(char name) {
 	processed = false;
 }
 
-//добавление исходящего ребра
+//РґРѕР±Р°РІР»РµРЅРёРµ РёСЃС…РѕРґСЏС‰РµРіРѕ СЂРµР±СЂР°
 void Node::addNeighboor(int ind, double weight, int h) {
 	for (int i = 0; i < num; i++) {
-		//если добавляемое ребро уже существует, можно изменить его вес
+		//РµСЃР»Рё РґРѕР±Р°РІР»СЏРµРјРѕРµ СЂРµР±СЂРѕ СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚, РјРѕР¶РЅРѕ РёР·РјРµРЅРёС‚СЊ РµРіРѕ РІРµСЃ
 		if (edges[i].vertex == ind) {
 			cout << "This edge already exists. Do you want to rewrite it? y/n" << endl;
 			char answ;
