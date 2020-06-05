@@ -174,6 +174,7 @@ void Graph::search() {
 		//эвристической функции
 		for (int i = 0; i < toVisit.size(); i++) {
 			double fI = f(toVisit[i]);
+			cout << "Currently in the queue: " << vertices[toVisit[i]].name << ", f = " << fI << endl;
 			if (fI < minF) {
 				minF = fI;
 				curr = toVisit[i];
@@ -182,6 +183,7 @@ void Graph::search() {
 		}
 		//если нашли конечную вершину - выводим путь до неё и завершаем алгоритм
 		if (vertices[curr].name == finish) {
+		    cout << "Found the terminating vertex " << vertices[curr].name << endl;
 			cout << vertices[curr].path << endl;
 			return;
 		}
@@ -194,6 +196,9 @@ void Graph::search() {
 			//вычисляем длину пути до рассматриваемой смежной вершины:
 			//"путь до текущей" + "вес ребра между текущей и смежной"
 			double tentScore = vertices[curr].pathLength + vertices[curr].edges[v].weight;
+			cout << "\tProcessing edge: " << vertices[curr].name << " " << vertices[vertices[curr].edges[v].vertex].name << endl;
+			cout << "\tCurrent path to neighbour: " << vertices[vertices[curr].edges[v].vertex].pathLength << endl;
+			cout << "\tPossible path to neighbour: " << tentScore << endl;
 			//если вершина ещё не обработана или удалось улучшить длину пути до неё, сохраняем новую длину пути
 			if (!vertices[vertices[curr].edges[v].vertex].processed || vertices[vertices[curr].edges[v].vertex].pathLength == -1
 				|| tentScore < vertices[vertices[curr].edges[v].vertex].pathLength) {
